@@ -1,25 +1,27 @@
-terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~> 4.0"
-    }
+
+# Define locals
+locals {
+  project_name = "devtron-demo"
+  environment  = "staging"
+  full_name    = "${local.project_name}-${local.environment}"
+}
+
+# Use the local variable in a resource (example with null_resource)
+resource "null_resource" "example" {
+  triggers = {
+    name = local.full_name
   }
-  required_version = ">= 1.0.0"
 }
 
-provider "azurerm" {
-  features {}
+# Output the local variable values
+output "project_name" {
+  value = local.project_name
 }
 
-resource "azurerm_resource_group" "state-demo-secure" {
-  name     = "state-demo"
-  location = "uaenorth"
-
-tags = {
-    environment = "team"
-    env         = "notprod"
-    team        = "devops"
-}
+output "environment" {
+  value = local.environment
 }
 
+output "full_name" {
+  value = local.full_name
+}
